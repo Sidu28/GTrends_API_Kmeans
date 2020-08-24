@@ -3,4 +3,14 @@ This program allows us to process google search trend data for a particualr sear
 
 ## Input Format
  The input to this program is a CSV file formatted as follows.  Each entry is made up of the google search trend values for a particualr search term for a given location, over a set time period.  In addition, each entry is labelled based on the state it is from (Where numbers 1 to 50 refer to states in alphabetical order).  These labels allow us to compare our clustering to the actual location of states.  
- ![Example Input](file:///Users/sidu/Desktop/Screen%20Shot%202020-08-24%20at%205.02.30%20PM.png)
+
+1 | 2 | 3 | labels
+------------ | ------------- | ------------- | -------------
+2 | 100 | 44 | 2
+13 | 100 | 21 | 10
+5 | 90 | 44 | 4
+
+To run the program, run the following command: 
+```bash
+python3 data.py filename.csv
+```
