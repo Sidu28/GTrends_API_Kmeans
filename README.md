@@ -53,5 +53,6 @@ Here the keyword is the google search term you want to retrieve data for.  The r
 
 To run the program, run the following command: 
 ```bash
+cd kmeans
 python3 kmeans.py filename.csv
 ```
