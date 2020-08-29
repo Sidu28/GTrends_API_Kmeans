@@ -69,13 +69,11 @@ class GTrendsAccessor:
         '''
         #Interest over time:
         
-        print('_'*40)
         #sys.stdout.write(f"\nDaily interest in the region for '{kwd}':\n")
         df_over_time = self.interest_over_time([kwd], region, tf)
         df_over_time = df_over_time.drop('isPartial', axis = 1) #gets rid of isPartial column
         #num_rows = len(df_over_time.index)
         #print(df_over_time.head(num_rows))
-        print('_'*40)
         
         
         '''

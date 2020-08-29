@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from gtrends_access import GTrendsAccessor
 from datetime import datetime
-from dateutil.rrule import rrule, WEEKLY, DAILY
+from dateutil.rrule import rrule, WEEKLY
 
 states = ["US-AL", "US-AK", "US-AZ"]
 
