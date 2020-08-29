@@ -1,0 +1,7 @@
+README.md
+setup.py
+GoogleTrends.egg-info/PKG-INFO
+GoogleTrends.egg-info/SOURCES.txt
+GoogleTrends.egg-info/dependency_links.txt
+GoogleTrends.egg-info/requires.txt
+GoogleTrends.egg-info/top_level.txt

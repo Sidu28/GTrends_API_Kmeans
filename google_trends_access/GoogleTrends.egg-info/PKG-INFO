@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: GoogleTrends
+Version: 0.1
+Summary: Accessing Google Trends using pytrends package
+Home-page: https://github.com/paepcke/google_trends_access.git
+Author: Andreas Paepcke
+Author-email: paepcke@cs.stanford.edu
+License: BSD
+Description: UNKNOWN
+Keywords: trends
+Platform: UNKNOWN
+Description-Content-Type: text/markdown
