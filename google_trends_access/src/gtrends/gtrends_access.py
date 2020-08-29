@@ -9,6 +9,7 @@ from enum import Enum
 
 from pytrends_patch import TrendReq
 import pandas as pd
+import numpy as np
 
 class GeoResolution(Enum):
     '''
@@ -20,7 +21,7 @@ class GeoResolution(Enum):
     COUNTRY = 'COUNTRY'
     
     
-class GTrendsAccessor(object):
+class GTrendsAccessor:
     '''
     Demonstrates use of pytrends for access
     Google Trends API via pytrends module.
@@ -51,26 +52,8 @@ class GTrendsAccessor(object):
         '''
         self.pytrend = TrendReq()
         
-        try:
-            kwd = sys.argv[1]
-        except:
-            kwd = 'Vote'
-        
-        try:
-            region = sys.argv[2]
-        except:
-            region = None
-            
-        try:
-            tf = sys.argv[3]
-        except:
-            tf = 'today 5-y'
-        
-        try:
-            graph = sys.argv[4]
-        except:
-            graph = None
-        
+    def api_result(self, kwd, region, tf, graph):
+
         # Interest by region:
         df_count_by_geo = self.interest_by_region([kwd], region, tf)
         
@@ -78,20 +61,26 @@ class GTrendsAccessor(object):
         num_rows = len(df_count_by_geo.index)
         print(df_count_by_geo.head(num_rows))
         
+        
+        
         if (graph != None):
             _ax = self.plot_term_freq(f'{kwd}', df_count_by_geo)
+        
         
         # Hourly interest:
         df = self.hourly_interest(kwd, geo = region)
         df_date_voting_isPartial = df.reset_index()
         sys.stdout.write(f"\nFirst 10 hourly interest for '{kwd}':\n")
         print(df_date_voting_isPartial.head(10))
-        # df_date_voting_isPartial.to_csv(path_or_buf="/tmp/foo.csv")
+         df_date_voting_isPartial.to_csv(path_or_buf="/tmp/foo.csv")
         
         # Related terms:
         df = self.related_terms(f'{kwd}')
         sys.stdout.write(f"\nTerms related to '{kwd}':\n")
-        print(df)
+        
+        
+        data = np.squeeze(np.asarray(df_count_by_geo.to_numpy()))
+        return data
 
     #------------------------------------
     # interest_by_region
