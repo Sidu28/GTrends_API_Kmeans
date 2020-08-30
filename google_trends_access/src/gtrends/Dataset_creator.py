@@ -6,7 +6,6 @@ from gtrends_access import GTrendsAccessor
 from datetime import datetime
 from dateutil.rrule import rrule, WEEKLY
 
-states = ["US-AL", "US-AK", "US-AZ"]
 
 
 
@@ -31,18 +30,29 @@ def main():
     except:
                 graph = None
                     
-    date_list = list(rrule(WEEKLY, dtstart=datetime(2014,12,13), until=datetime(2014,12,25)))
+    date_list = list(rrule(WEEKLY, dtstart=datetime(2014,9,13), until=datetime(2014,12,25)))
+    print("date",len(date_list))
     matrix = []
     for i in range(len(date_list)-1):
         start = date_list[i].strftime("%Y-%m-%d")
         end = date_list[i+1].strftime("%Y-%m-%d")
         time_range = start + " " + end
         
+        states = states_list()
+        index = 0
         for state in states:
-            trend_values = GTrendsAccessor().api_result(kwd, state, time_range, None)
-            trend_values = trend_values.tolist()
-            trend_values.append(state)  #now trend_values has the values plus the region label at the end
-            matrix.append(trend_values)
+            state = "US-"+state
+            
+            for i in range(len(date_list)-1):
+                start = date_list[i].strftime("%Y-%m-%d")
+                end = date_list[i+1].strftime("%Y-%m-%d")
+                time_range = start + " " + end
+                print(time_range)
+                trend_values = GTrendsAccessor().api_result(kwd, state, time_range, None)
+                trend_values = trend_values.tolist()
+                trend_values.append(index)  #now trend_values has the values plus the region label at the end
+                matrix.append(trend_values)
+                index+=1
     
     file = open('dataset.csv', 'w+', newline ='')
     with file:
@@ -50,7 +60,20 @@ def main():
         write.writerows(matrix)
     
 
-    
+
+def states_list():
+    with open('state.csv','r') as csv_file:
+        lines = csv_file.readlines()
+
+    number = []
+    state_abbrev = []
+    for line in lines:
+        data = line.split(',')
+        number.append(data[0])
+        dat = data[1]
+        state_abbrev.append(dat[:-1])
+    return state_abbrev
+
     
 # This if-condition is True if this file was executed directly.
 # It's False if this file was executed indirectly, e.g. as part

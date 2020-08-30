@@ -50,7 +50,7 @@ class GTrendsAccessor:
         Put this module through its paces: call
         each method to illustrate its use.
         '''
-        self.pytrend = TrendReq()
+        self.pytrend = TrendReq(hl='en-US', tz=360)
         
     def api_result(self, kwd, region, tf, graph):
         '''
@@ -68,13 +68,12 @@ class GTrendsAccessor:
         
         '''
         #Interest over time:
-        
+        print('_'*20)
         #sys.stdout.write(f"\nDaily interest in the region for '{kwd}':\n")
         df_over_time = self.interest_over_time([kwd], region, tf)
         df_over_time = df_over_time.drop('isPartial', axis = 1) #gets rid of isPartial column
         #num_rows = len(df_over_time.index)
         #print(df_over_time.head(num_rows))
-        
         
         '''
         # Hourly interest:
