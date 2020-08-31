@@ -9,11 +9,11 @@ cd google_trends_access
 ```
 Once you are there, run the following command:
 ```bash
-python src/gtrends/Dataset_creator.py keyword region timeframe graph
+python src/gtrends/Dataset_creator.py keyword
 ```
 Example:
 ```bash
-python src/gtrends/Dataset_creator.py hello US-AL
+python src/gtrends/Dataset_creator.py hello
 ```
 Here the keyword is the google search term you want to retrieve data for.  The region is the region of interest that you want to select.  The format of the region parameter is based on the [UNECE Codes for Trade](http://www.unece.org/cefact/codesfortrade/codes_index.html).  In order to look up the region code that you require, please take a look at the countries.rda file.  Include the parameter 'graph' to generate a plot of the data.  For the time frame parameter, there are a few formatting options:
 
