@@ -2,24 +2,27 @@ import sys
 import csv
 import pandas as pd
 import numpy as np
+import time
 from gtrends_access import GTrendsAccessor
 from datetime import datetime
+from datetime import timedelta
 from dateutil.rrule import rrule, WEEKLY
 
 
 
 
-def main():
+
+def make_one_call():
     try:
                 kwd = sys.argv[1]
     except:
                 kwd = 'Vote'
-            
+
     try:
-                region = sys.argv[2]
+                tf = sys.argv[3]
     except:
-                region = None
-                
+                tf = 'US'
+
     try:
                 tf = sys.argv[3]
     except:
@@ -29,12 +32,30 @@ def main():
                 graph = sys.argv[4]
     except:
                 graph = None
-                    
-    date_list = list(rrule(WEEKLY, dtstart=datetime(2014,9,13), until=datetime(2014,12,25)))
+                
+    df = GTrendsAccessor().api_result_with_graphics(kwd, state, time_range, graph)
+    
+    
+            
+def main():  #make this not main
+    try:
+                kwd = sys.argv[1]
+    except:
+                kwd = 'Vote'
+                
+    try:
+                tf = sys.argv[3]
+    except:
+                tf = '2018-06-29'
+            
+
+    
+    date_list = list(rrule(WEEKLY, dtstart=datetime(2014,9,13), until=datetime(2014,9,27)))
     print("date",len(date_list))
     matrix = []
     for i in range(len(date_list)-1):
-        start = date_list[i].strftime("%Y-%m-%d")
+        start = date_list[i] + timedelta(days=1)
+        start = start.strftime("%Y-%m-%d")
         end = date_list[i+1].strftime("%Y-%m-%d")
         time_range = start + " " + end
         
@@ -44,15 +65,17 @@ def main():
             state = "US-"+state
             
             for i in range(len(date_list)-1):
+                time.sleep(4)
                 start = date_list[i].strftime("%Y-%m-%d")
                 end = date_list[i+1].strftime("%Y-%m-%d")
                 time_range = start + " " + end
                 print(time_range)
-                trend_values = GTrendsAccessor().api_result(kwd, state, time_range, None)
+                trend_values = GTrendsAccessor().api_result(kwd, state, time_range)
                 trend_values = trend_values.tolist()
                 trend_values.append(index)  #now trend_values has the values plus the region label at the end
                 matrix.append(trend_values)
-                index+=1
+            time.sleep(170)
+            index+=1
     
     file = open('dataset.csv', 'w+', newline ='')
     with file:

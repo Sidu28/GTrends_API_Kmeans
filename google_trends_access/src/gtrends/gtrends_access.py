@@ -50,45 +50,58 @@ class GTrendsAccessor:
         Put this module through its paces: call
         each method to illustrate its use.
         '''
-        self.pytrend = TrendReq(hl='en-US', tz=360)
+        self.pytrend = TrendReq(hl='en-US', tz=1000)
         
-    def api_result(self, kwd, region, tf, graph):
-        '''
-        # Interest by region:
-        df_count_by_geo = self.interest_by_region([kwd], region, tf)
-        
-        sys.stdout.write(f"\nFirst 10 cities count for '{kwd}':\n")
-        num_rows = len(df_count_by_geo.index)
-        print(df_count_by_geo.head(num_rows))
-        
-        
-        
-        if (graph != None):
-            _ax = self.plot_term_freq(f'{kwd}', df_count_by_geo)
-        
-        '''
+    def api_result(self, kwd, region, tf):
         #Interest over time:
         print('_'*20)
         #sys.stdout.write(f"\nDaily interest in the region for '{kwd}':\n")
         df_over_time = self.interest_over_time([kwd], region, tf)
         df_over_time = df_over_time.drop('isPartial', axis = 1) #gets rid of isPartial column
-        #num_rows = len(df_over_time.index)
-        #print(df_over_time.head(num_rows))
-        
-        '''
-        # Hourly interest:
-        df = self.hourly_interest(kwd, geo = region)
-        df_date_voting_isPartial = df.reset_index()
-        sys.stdout.write(f"\nFirst 10 hourly interest for '{kwd}':\n")
-        print(df_date_voting_isPartial.head(10))
-        df_date_voting_isPartial.to_csv(path_or_buf="/tmp/foo.csv")
-        
-        # Related terms:
-        df = self.related_terms(f'{kwd}')
-        sys.stdout.write(f"\nTerms related to '{kwd}':\n")
-        '''
+
         data = np.squeeze(np.asarray(df_over_time.to_numpy()))
         return data
+
+        #------------------------------------
+        # SIngle API Call with graphics
+        #-------------------
+    def api_result_with_graphics(self, kwd, region, tf, graph):
+            
+            # Interest by region:
+            df_count_by_geo = self.interest_by_region([kwd], region, tf)
+            
+            sys.stdout.write(f"\nFirst 10 cities count for '{kwd}':\n")
+            num_rows = len(df_count_by_geo.index)
+            print(df_count_by_geo.head(num_rows))
+            
+            
+            if (graph != None):
+                _ax = self.plot_term_freq(f'{kwd}', df_count_by_geo)
+            
+            
+            #Interest over time:
+            print('_'*20)
+            sys.stdout.write(f"\nDaily interest in the region for '{kwd}':\n")
+            df_over_time = self.interest_over_time([kwd], region, tf)
+            df_over_time = df_over_time.drop('isPartial', axis = 1) #gets rid of isPartial column
+            num_rows = len(df_over_time.index)
+            print(df_over_time.head(num_rows))
+            
+            print('_'*20)
+            # Hourly interest:
+            df = self.hourly_interest(kwd, geo = region)
+            df_date_voting_isPartial = df.reset_index()
+            sys.stdout.write(f"\nFirst 10 hourly interest for '{kwd}':\n")
+            print(df_date_voting_isPartial.head(10))
+            df_date_voting_isPartial.to_csv(path_or_buf="/tmp/foo.csv")
+            print('_'*20)
+            
+            # Related terms:
+            df = self.related_terms(f'{kwd}')
+            sys.stdout.write(f"\nTerms related to '{kwd}':\n")
+            
+            data = np.squeeze(np.asarray(df_over_time.to_numpy()))
+            return data
 
     #------------------------------------
     # interest_by_region
