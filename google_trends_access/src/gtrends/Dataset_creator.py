@@ -8,11 +8,20 @@ from datetime import datetime
 from datetime import timedelta
 from dateutil.rrule import rrule, WEEKLY
 
+'''
+def maissn():
 
+    choice = input("Would you like to run one call or compile multiple calls (answer: one/mult)")
+    if choice == 'once':
+        single_call()
+    if choice == 'mult':
+        multiple_call()
+    else:
+        raise ValueError("invalid answer - choose either 'once' or 'mult')
 
-
-
-def make_one_call():
+        
+'''
+def single_call():
     try:
                 kwd = sys.argv[1]
     except:
@@ -50,34 +59,30 @@ def main():  #make this not main
             
 
     
-    date_list = list(rrule(WEEKLY, dtstart=datetime(2014,9,13), until=datetime(2014,9,27)))
+    date_list = list(rrule(WEEKLY, dtstart=datetime(2015,9,13), until=datetime(2015,9,27)))
     print("date",len(date_list))
     matrix = []
-    for i in range(len(date_list)-1):
-        start = date_list[i] + timedelta(days=1)
-        start = start.strftime("%Y-%m-%d")
-        end = date_list[i+1].strftime("%Y-%m-%d")
-        time_range = start + " " + end
-        
-        states = states_list()
-        index = 0
-        for state in states:
-            state = "US-"+state
+
+    states = states_list()
+    index = 0
+    for state in states:
+        state = "US-"+state
             
-            for i in range(len(date_list)-1):
-                time.sleep(4)
-                start = date_list[i].strftime("%Y-%m-%d")
-                end = date_list[i+1].strftime("%Y-%m-%d")
-                time_range = start + " " + end
-                print(time_range)
-                trend_values = GTrendsAccessor().api_result(kwd, state, time_range)
-                trend_values = trend_values.tolist()
-                trend_values.append(index)  #now trend_values has the values plus the region label at the end
-                matrix.append(trend_values)
-            time.sleep(170)
-            index+=1
+        for i in range(len(date_list)-1):
+            time.sleep(1)
+            start = date_list[i].strftime("%Y-%m-%d")
+            end = date_list[i+1].strftime("%Y-%m-%d")
+            time_range = start + " " + end
+            print(time_range)
+            trend_values = GTrendsAccessor().api_result(kwd, state, time_range)
+            trend_values = trend_values.tolist()
+            trend_values.append(index)  #now trend_values has the values plus the region label at the end
+            matrix.append(trend_values)
+        time.sleep(5)
+        index+=1
     
-    file = open('dataset.csv', 'w+', newline ='')
+    curr_moment = time.strftime("%Y-%b-%d__%H:%M:%S",time.localtime())
+    file = open('dataset-'+curr_moment+'.csv', 'w+', newline ='')
     with file:
         write = csv.writer(file)
         write.writerows(matrix)
