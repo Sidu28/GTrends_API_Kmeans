@@ -14,7 +14,8 @@ from sklearn.preprocessing import scale
 
 def k_means_performance(estimator, name, data, labels):
     t0 = time()
-    cluster_indices = estimator.fit (data)
+    #cluster_indices = estimator.fit (data)
+    estimator.fit (data)
     print('%-9s\t%.2fs\t%i\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f'
     % (name, (time() - t0), estimator.inertia_,
                    metrics.homogeneity_score(labels, estimator.labels_),
@@ -22,7 +23,7 @@ def k_means_performance(estimator, name, data, labels):
                    metrics.v_measure_score(labels, estimator.labels_),
                    metrics.adjusted_rand_score(labels, estimator.labels_),
                    metrics.adjusted_mutual_info_score(labels,  estimator.labels_)))
-    return cluster_indices
+    #return cluster_indices
     
 def PCA_2(data, clusters):
     reduced_data = PCA(n_components=2).fit_transform(data)
@@ -70,7 +71,8 @@ def k_means(filename):
     df = pd.read_csv(filename, header=0)
     n = len(df.columns)
 
-    labels = (df[['label']].to_numpy()).transpose()  #gets all the labels so we can check against our clustering
+    labels = df.iloc[:,-1]
+    labels = (labels.to_numpy()).transpose()  #gets all the labels so we can check against our clustering
     labels=np.array(labels).flatten()  #converting labels into an array for processing metrics in k_means_performance
     clusters = len(np.unique(labels))    #gets the number of clusters based on the number of unique labels there are
 
@@ -89,8 +91,8 @@ def k_means(filename):
 
     k_means_performance(KMeans(init='random', n_clusters=clusters, n_init=10),name="random", data=data, labels = labels)   #gives us performance
     
-    pca = PCA(n_components=clusters).fit(data)
-    k_means_performance(KMeans(init=pca.components_, n_clusters=clusters, n_init=1),
+    pca = PCA(n_components=n_features).fit(data)
+    k_means_performance(KMeans(init=pca.components_, n_clusters=clusters, n_init=9),
                   name="PCA-based",
                   data=data, labels = labels)
     print(82 * '_')
@@ -109,7 +111,6 @@ def k_means(filename):
        #           data=data)
     
 
-
 def main():
     filename = sys.argv[1]
     k_means(filename)
@@ -119,5 +120,6 @@ def main():
 # of an import statement.
 if __name__ == "__main__":
     main()
+
 
 

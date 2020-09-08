@@ -1,5 +1,6 @@
 import sys
 import csv
+import argparse
 import pandas as pd
 import numpy as np
 import time
@@ -8,19 +9,18 @@ from datetime import datetime
 from datetime import timedelta
 from dateutil.rrule import rrule, WEEKLY
 
-'''
-def maissn():
 
-    choice = input("Would you like to run one call or compile multiple calls (answer: one/mult)")
+def main():
+
+    choice = input("Would you like to run one call or compile multiple calls (answer: one/mult):  ")
+    
     if choice == 'once':
         single_call()
+    
     if choice == 'mult':
-        multiple_call()
-    else:
-        raise ValueError("invalid answer - choose either 'once' or 'mult')
-
+        mult_call()
         
-'''
+        
 def single_call():
     try:
                 kwd = sys.argv[1]
@@ -28,9 +28,9 @@ def single_call():
                 kwd = 'Vote'
 
     try:
-                tf = sys.argv[3]
+                 state = sys.argv[3]
     except:
-                tf = 'US'
+                state = 'US'
 
     try:
                 tf = sys.argv[3]
@@ -42,24 +42,29 @@ def single_call():
     except:
                 graph = None
                 
-    df = GTrendsAccessor().api_result_with_graphics(kwd, state, time_range, graph)
+    df = GTrendsAccessor().api_result_with_graphics(kwd, state, tf, graph)
     
     
             
-def main():  #make this not main
+def mult_call():  #make this not main
     try:
                 kwd = sys.argv[1]
     except:
                 kwd = 'Vote'
                 
     try:
-                tf = sys.argv[3]
+                tf1 = sys.argv[2]
     except:
-                tf = '2018-06-29'
+                tf1 = '2018-06-29'
+    try:
+                tf2 = sys.argv[3]
+    except:
+                tf2 = '2018-06-30'
             
 
-    
-    date_list = list(rrule(WEEKLY, dtstart=datetime(2015,9,13), until=datetime(2015,9,27)))
+    start = datetime.strptime(tf1, '%Y-%m-%d')
+    end = datetime.strptime(tf2, '%Y-%m-%d')
+    date_list = list(rrule(WEEKLY, dtstart=start, until=end))
     print("date",len(date_list))
     matrix = []
 
@@ -69,8 +74,9 @@ def main():  #make this not main
         state = "US-"+state
             
         for i in range(len(date_list)-1):
-            time.sleep(1)
-            start = date_list[i].strftime("%Y-%m-%d")
+            time.sleep(3)
+            date = date_list[i] + timedelta(days=1)
+            start = date.strftime("%Y-%m-%d")
             end = date_list[i+1].strftime("%Y-%m-%d")
             time_range = start + " " + end
             print(time_range)
@@ -78,9 +84,10 @@ def main():  #make this not main
             trend_values = trend_values.tolist()
             trend_values.append(index)  #now trend_values has the values plus the region label at the end
             matrix.append(trend_values)
-        time.sleep(5)
+        time.sleep(10)
         index+=1
     
+     
     curr_moment = time.strftime("%Y-%b-%d__%H:%M:%S",time.localtime())
     file = open('dataset-'+curr_moment+'.csv', 'w+', newline ='')
     with file:
