@@ -57,7 +57,9 @@ class GTrendsAccessor:
         print('_'*20)
         #sys.stdout.write(f"\nDaily interest in the region for '{kwd}':\n")
         df_over_time = self.interest_over_time([kwd], region, tf)
-        df_over_time = df_over_time.drop('isPartial', axis = 1) #gets rid of isPartial column
+        
+        if 'isPartial' in df_over_time.columns:
+            df_over_time = df_over_time.drop('isPartial', axis = 1) #gets rid of isPartial column
 
         data = np.squeeze(np.asarray(df_over_time.to_numpy()))
         return data

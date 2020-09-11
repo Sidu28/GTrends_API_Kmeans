@@ -8,6 +8,8 @@ from gtrends_access import GTrendsAccessor
 from datetime import datetime
 from datetime import timedelta
 from dateutil.rrule import rrule, WEEKLY
+from sklearn import manifold
+
 
 
 def main():
@@ -89,7 +91,7 @@ def mult_call():  #make this not main
     
      
     curr_moment = time.strftime("%Y-%b-%d__%H:%M:%S",time.localtime())
-    file = open('dataset-'+curr_moment+'.csv', 'w+', newline ='')
+    file = open('dataset_'+tf1[0:3]+'_'+kwd+'.csv', 'w+', newline ='')
     with file:
         write = csv.writer(file)
         write.writerows(matrix)

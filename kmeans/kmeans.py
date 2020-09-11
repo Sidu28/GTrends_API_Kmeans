@@ -9,7 +9,7 @@ from sklearn import metrics
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_digits
 from sklearn.preprocessing import scale
-
+from sklearn import manifold
 
 
 def k_means_performance(estimator, name, data, labels):
@@ -92,9 +92,8 @@ def k_means(filename):
     k_means_performance(KMeans(init='random', n_clusters=clusters, n_init=10),name="random", data=data, labels = labels)   #gives us performance
     
     pca = PCA(n_components=n_features).fit(data)
-    k_means_performance(KMeans(init=pca.components_, n_clusters=clusters, n_init=9),
-                  name="PCA-based",
-                  data=data, labels = labels)
+    print((pca.components_))
+    k_means_performance(KMeans(init=pca.components_, n_clusters=clusters, n_init=1), name="PCA-based", data=data, labels = labels)
     print(82 * '_')
 
               
