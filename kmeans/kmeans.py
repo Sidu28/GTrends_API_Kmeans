@@ -24,7 +24,7 @@ def k_means_performance(estimator, name, data, labels):
                    metrics.adjusted_rand_score(labels, estimator.labels_),
                    metrics.adjusted_mutual_info_score(labels,  estimator.labels_)))
     #return cluster_indices
-    
+'''
 def PCA_2(data, clusters):
     reduced_data = PCA(n_components=2).fit_transform(data)
     kmeans = KMeans(init='k-means++', n_clusters=clusters, n_init=10)
@@ -62,7 +62,7 @@ def PCA_2(data, clusters):
     plt.xticks(())
     plt.yticks(())
     plt.show()
-
+'''
 
     
 
@@ -91,16 +91,27 @@ def k_means(filename):
 
     k_means_performance(KMeans(init='random', n_clusters=clusters, n_init=10),name="random", data=data, labels = labels)   #gives us performance
     
-    pca = PCA(n_components=n_features).fit(data)
+    '''
+    pca = PCA(n_components=51).fit(data)
+    
+    projected = pca.fit_transform(data)
+    print("original shape:   ", data.shape)
+    print("transformed shape:", projected.shape)
+    
+    plt.scatter(projected[:, 0], projected[:, 1], edgecolor='none', alpha=0.5,
+                cmap=plt.cm.get_cmap('pink', 10))
+    plt.xlabel('component 1')
+    plt.ylabel('component 2')
+    plt.colorbar();
+    
+    
     print((pca.components_))
     k_means_performance(KMeans(init=pca.components_, n_clusters=clusters, n_init=1), name="PCA-based", data=data, labels = labels)
     print(82 * '_')
 
-              
-              
     #Visualize Data:
     PCA_2(data, clusters)
-              
+    '''
               
               
               
