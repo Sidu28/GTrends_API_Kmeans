@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''
 Created on Aug 27, 2020
-@author: paepcke
+@author: siddhartha
 '''
 
 import sys
